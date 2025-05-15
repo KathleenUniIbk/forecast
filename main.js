@@ -73,12 +73,20 @@ async function showForecast(latlng) {
         title="${time.toLocaleString()}">`;
     }
 
+//Links zu den JSON-Daten
+markup += `
+<p>
+<a href="${url}" target="forecast" >Daten downloaden</a> |
+<a href="${osmUrl}" target="forecast" >Osm Details zum Ort</a>
+</p>
+`;
     L.popup([
         latlng.lat, latlng.lng
     ], {
         content: markup
     }).openOn(overlays.forecast);
 }
+
 
 //auf Kartenklick reagieren
 map.on("click", function (evt) {
