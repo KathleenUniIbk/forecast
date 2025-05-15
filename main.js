@@ -31,7 +31,7 @@ L.control.scale({
 }).addTo(map);
 
 //MET Norway Vorhersage visualisieren
-async function showForecast(latlng){
+async function showForecast(latlng) {
     //console.log("Popup erzeugen bei:",latlng);
     let url = `https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=${latlng.lat}&lon=${latlng.lng}`;
     //console.log(url);
@@ -41,7 +41,9 @@ async function showForecast(latlng){
 
     //popup erzeugen
     let details = jsondata.properties.timeseries[0].data.instant.details;
-    let markup =`
+    let timestamp = new Date(jsondata.properties.meta.updated_at);
+    let markup = `
+    <h3> Wettervorhersage für ${timestamp.toLocaleString()}</h3>
     <ul>
         <li>Luftdruck (hPa): ${details.air_pressure_at_sea_level}</li>
         <li>Lufttemperatur (°C): ${details.air_temperature}</li>
@@ -52,16 +54,23 @@ async function showForecast(latlng){
     </ul>
     `;
 
+    //Wettericons für die nächsten 24 Stunden in 3 Stunden Schritten
+    for (let i = 0; i <= 24; i += 3) {
+        let symbol = jsondata.properties.timeseries[i].data.next_1_hours.summary.symbol_code;
+
+        markup +=`<image src="icons/${symbol}.svg" style="width: 32px">`;
+    }
+
     L.popup([
         latlng.lat, latlng.lng
-    ],{
+    ], {
         content: markup
     }).openOn(overlays.forecast);
 }
 
 //auf Kartenklick reagieren
-map.on("click", function(evt){
-   // console.log(evt, evt.latlng);
+map.on("click", function (evt) {
+    // console.log(evt, evt.latlng);
     showForecast(evt.latlng);
 })
 
