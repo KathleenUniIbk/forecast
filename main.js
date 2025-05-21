@@ -114,15 +114,16 @@ map.fire("click", {
                 displayOptions: {
                     velocityType: "Wind",
                     position: "bottomleft",
-                    speedUnit: "km/h",
+                    speedUnit: "k/h",
                     emptyString: "Keine Winddaten verfügbar",
+                    angleConversion: "meteo",
                     showCardinal: true,
                     directionString: "Richtung",
-                    speedString: "Geschwindigkeit (km/h)"
+                    speedString: "Geschwindigkeit (k/h)"
                 },
                 data: data,
                 minVelocity: 0,
-                maxVelocity: 20,
+                maxVelocity: 10,
                 velocityScale: 0.005,
                 colorScale: [
                     "#3288bd", "#66c2a5", "#abdda4", "#e6f598",
