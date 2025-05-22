@@ -30,6 +30,8 @@ L.control.scale({
     imperial: false,
 }).addTo(map);
 
+
+
 //Ort über OpenStreetMap Reverse Geocoding bestimmen
 async function getPlaceName(url){
     let response = await fetch(url);
@@ -130,7 +132,7 @@ map.fire("click", {
                     "#fee08b", "#fdae61", "#f46d43", "#d53e4f"
                 ],
                 opacity: 0.97
-            }).addTo(map);
+            }).addTo(overlays.wind);
         } catch (error) {
             console.error("Fehler beim Laden der Winddaten:", error);
             alert("Winddaten konnten nicht geladen werden.");
@@ -138,3 +140,25 @@ map.fire("click", {
     }
 
     loadWindLayer();
+
+//Winanimaltionen neu
+async function loadWind(url){
+    let response = await fetch(url);
+    let jsondata = await response.json();
+    //console.log(jsondata[0].header.refTime);
+    //console.log([0].header.forecastTime);
+    let forecastDate =new Date (jsondata[0].header.refTime);
+    forecastDate.setHours(forecastDate.getHours()+jsondata[0].header.forecastTime);
+
+    let forecastSpan = document.querySelector("#forecast-link");
+    console.log(forecastSpan);
+    forecastSpan.innerHTML= `
+    (<a href="${url}" target="met.no">${forecastDate.toLocaleString()}</a>)
+    `;
+    L.velocityLayer({
+        data: jsondatalineWidth: 2,
+        displayOptions:{
+
+        }
+    })
+}
